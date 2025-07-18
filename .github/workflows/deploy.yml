@@ -43,9 +43,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
+          - os: windows-2022
             arch: x64
-          - os: windows-2019
+          - os: windows-2022
             arch: x86
           - os: ubuntu-latest
             arch: x64
@@ -65,7 +65,7 @@ jobs:
           path: .
       - name: Setup MSVC (Windows only)
         uses: ilammy/msvc-dev-cmd@v1
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-2022'
         with:
           arch: ${{ matrix.arch }}
           toolset: 14.0
@@ -74,7 +74,7 @@ jobs:
         with:
           version: '5.15.2'
           target: 'desktop'
-          arch: ${{ matrix.os == 'windows-2019' && (matrix.arch == 'x64' && 'win64_msvc2019_64' || 'win32_msvc2019' ) || (matrix.os == 'ubuntu-latest' && 'gcc_64' || 'clang_64') }}
+          arch: ${{ matrix.os == 'windows-2022' && (matrix.arch == 'x64' && 'win64_msvc2022_64' || 'win32_msvc2022' ) || (matrix.os == 'ubuntu-latest' && 'gcc_64' || 'clang_64') }}
           dir: '${{ github.workspace }}'
           cache: true
           cache-key-prefix: ${{ runner.os }}-${{ matrix.arch }}-Qt
@@ -82,10 +82,10 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v2
       - name: Build
         run: |
-          cmake ${{matrix.os == 'windows-2019' && '-A' || ''}} ${{matrix.os == 'windows-2019' && (matrix.arch == 'x64' && 'x64' || 'Win32') || '' }} .
+          cmake ${{matrix.os == 'windows-2022' && '-A' || ''}} ${{matrix.os == 'windows-2022' && (matrix.arch == 'x64' && 'x64' || 'Win32') || '' }} .
           cmake --build . --config Release
       - name: Rename release (Windows)
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-2022'
         run: |
           mv Release/${{ env.PLUGIN_NAME }}.dll ${{ env.PLUGIN_NAME }}_win${{ matrix.arch == 'x64' && '64' || '32' }}.dll
       - name: Rename release (Linux)
